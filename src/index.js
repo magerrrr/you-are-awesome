@@ -1,18 +1,95 @@
-// DO WHATEVER YOU WANT HERE
-
 const createEnumerableProperty = () => {};
-const createNotEnumerableProperty = () => {};
-const createProtoMagicObject = () => {};
-const incrementor = () => {};
-const asyncIncrementor = () => {};
-const createIncrementer = () => {};
 
-// return same argument not earlier than in one second, and not later, than in two
-const returnBackInSecond = () => {};
-const getDeepPropertiesCount = () => {};
-const createSerializedObject = () => {};
+const createNotEnumerableProperty = (propertyName) => {
+    Object.defineProperty(Object.prototype, propertyName, ({
+        enumerable: false,
+        get: function () {
+            return value;
+        },
+        set: function (newVal) {
+            value = newVal;
+        }
+    }));
+    return propertyName
+};
+
+const createProtoMagicObject = () => {
+    var a = function () {
+        return {};
+    };
+    a.prototype = a.__proto__;
+    return a;
+};
+
+const incrementor = (() => {
+    var _value = 0;
+
+    function _incrementor() {
+        _value++;
+        return _incrementor;
+    };
+
+    _incrementor.valueOf = function () {
+        return _value
+    };
+
+    return _incrementor;
+})();
+
+const asyncIncrementor = () => {
+    if (typeof this.asyncIncr == 'undefined') {
+        this.asyncIncr = 1;
+    } else {
+        this.asyncIncr++;
+    }
+    var value = this.asyncIncr;
+
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(value);
+        }, 10);
+    });
+};
+
+
+const createIncrementer = () => {
+    var value = 0;
+    return {
+        next() {
+            return {
+                value: ++value,
+                done: false
+            };
+        },
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+};
+
+const returnBackInSecond = (argument) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(argument);
+        }, 1000);
+    });
+};
+const getDeepPropertiesCount = (obj) => {};
+
+const createSerializedObject = () => {
+    let sObj = {
+        key: "value"
+    };
+    Object.defineProperty(sObj, "toJSON", {
+        value: function () {
+            return sObj.toString();
+        }
+    });
+    return sObj;
+};
 const toBuffer = () => {};
-const sortByProto = () => {};
+
+const sortByProto = (srcArr) => {};
 
 exports.createEnumerableProperty = createEnumerableProperty;
 exports.createNotEnumerableProperty = createNotEnumerableProperty;
